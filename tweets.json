@@ -1,0 +1,34 @@
+{
+  "tweets": [
+    {
+      "from": "Steve Barnegren",
+      "handler": "SteveBarnegren",
+      "message": "How to start work on an inherited codebase:\n\n1. Create new folder called 'Legacy'\n2. Highlight entire codebase\n3. Drag to 'Legacy' folder",
+      "timestamp": "1596017523"
+    },
+    {
+      "from": "Rémi Sormain",
+      "handler": "RSormain",
+      "message": "What I find amazing in @rustlang is how it efficiently prevents you from doing silly stuff with no runtime cost. As some suggested the solution to this sample is to \"borrow\" the string with a reference, and Rust will make sure you're not modifying the borrowed string #programming",
+      "timestamp": "1596013933"
+    },
+    {
+      "from": "THEODORA 2.0",
+      "handler": "theodora_tataru",
+      "message": "Just got the Arctic Code Vault Contributor on @GitHub, which means that: \"This action aims to preserve open-source software for future generations by storing it in an archive built to last a thousand years.\" - SO COOL!\nI am pretty sure you got one too!\n#100DaysOfCode\n#programming\n#javascript",
+      "timestamp": "1595588413"
+    },
+    {
+      "from": "orthodox mouse (almost)",
+      "handler": "orthodoxmouse",
+      "message": "Thanks. I fully accept responsibility for that part. Line 11 was provided by the textbook.",
+      "timestamp": "1595809469"
+    },
+    {
+      "from": "Naveen Blue",
+      "handler": "naveen_kashyapp",
+      "message": "Here's how to find a cycle in a linked list. Using fast and slow pointers. If there's a cycle these two pointer will meet at same node otherwise there's not a cycle. because fast is going 2x speed than slow.\n\n#100DaysOfCode #programming #CodeNewbie #javascript",
+      "timestamp": "1595978410"
+      }
+  ]
+}
