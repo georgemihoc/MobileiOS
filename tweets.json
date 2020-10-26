@@ -25,7 +25,7 @@
       "timestamp": "1595809469"
     },
     {
-      "from": "Naveen Blue",
+      "from": "George Mihoc",
       "handler": "naveen_kashyapp",
       "message": "Here's how to find a cycle in a linked list. Using fast and slow pointers. If there's a cycle these two pointer will meet at same node otherwise there's not a cycle. because fast is going 2x speed than slow.\n\n#100DaysOfCode #programming #CodeNewbie #javascript",
       "timestamp": "1595978410"
