@@ -12,7 +12,6 @@ import BRYXBanner
 
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
     let child = SpinnerViewController()
     
     var items: [Item] = []
@@ -31,20 +30,6 @@ class ViewController: UIViewController {
         
         getUIReady()
         fetchData()
-        
-        listenToWebSocket()
-        
-    }
-    
-    private func listenToWebSocket() {
-        socketService.didRecieveObject = {[weak self] object in
-            guard let strongSelf = self else { return }
-            strongSelf.items.append(object.payload.item)
-            strongSelf.tableView.reloadData()
-            
-            AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.item.text)
-            strongSelf.tableView.flashScrollIndicators()
-        }
     }
 }
 
@@ -66,6 +51,14 @@ extension ViewController{
         }
     }
     
+    func getUIReady() {
+        // Add pull to refresh functionality to tableview
+        self.tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        
+        // Add hide keyboard functionality to the view controller
+        self.hideKeyboardWhenTappedAround()
+    }
+    
 }
 
 //MARK: - Networking & others
@@ -73,12 +66,13 @@ extension ViewController{
     
     func download(){
         Networking.download { [weak self] downloadedItems in
-            self?.items = downloadedItems
+            guard let strongSelf = self else { return }
+            strongSelf.items = downloadedItems
             
             //            Defaults.store(downloadedItems)
-            
+            strongSelf.listenToWebSocket()
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                strongSelf.tableView.reloadData()
             }
         }
     }
@@ -104,6 +98,17 @@ extension ViewController{
             defaults.removeObject(forKey: key)
         }
     }
+    
+    private func listenToWebSocket() {
+        socketService.didRecieveObject = {[weak self] object in
+            guard let strongSelf = self else { return }
+            strongSelf.items.append(object.payload.item)
+            strongSelf.tableView.reloadData()
+            
+            AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.item.text)
+            strongSelf.tableView.flashScrollIndicators()
+        }
+    }
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -124,7 +129,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let viewController = storyboard?.instantiateViewController(identifier: "SecondViewController") as? SecondViewController {
+        if let viewController = storyboard?.instantiateViewController(identifier: ViewControllerNames.secondViewController) as? SecondViewController {
             viewController.name = items[indexPath.row].text
             viewController.data = items[indexPath.row].date
             
@@ -140,7 +145,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     @objc func refresh(sender: AnyObject)
     {
         download()
-        tableView.reloadData()
         tableView.refreshControl?.endRefreshing()
     }
 }
@@ -158,23 +162,17 @@ extension ViewController {
     }
 }
 
-//MARK:- UITableViewCell
-class TableViewCell: UITableViewCell{
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var handlerLabel: UILabel!
-    @IBOutlet weak var dataLabel: UILabel!
-    @IBOutlet weak var messageLabel: UILabel!
-}
-
+//MARK: - Date extension
 extension ViewController {
-    
-    func getUIReady() {
-        // Add pull to refresh functionality to tableview
-        self.tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
-        
-        // Add hide keyboard functionality to the view controller
-        self.hideKeyboardWhenTappedAround()
+    func formatDate(str: String) -> String{
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        if let date = dateFormatter.date(from: str) {
+            return date.description  // "2015-05-15 21:58:00 +0000"
+        }
+        return ""
     }
 }
 
@@ -188,19 +186,5 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
-}
-
-//MARK: - Date extension
-extension ViewController {
-    func formatDate(str: String) -> String{
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = .init(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        if let date = dateFormatter.date(from: str) {
-            return date.description  // "2015-05-15 21:58:00 +0000"
-        }
-        return ""
     }
 }

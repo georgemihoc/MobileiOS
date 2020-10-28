@@ -33,9 +33,6 @@ struct Item: Codable {
 
 class Networking {
     
-    static let downloadLink = "https://raw.githubusercontent.com/georgemihoc/MobileiOS/main/tweets.json"
-    static let nodeAPI = "http://127.0.0.1:3000/item"
-    
     static func download(completion: @escaping ([Item]) -> Void) {
         
         AF.request(Constants.nodeApi, method: .get).responseJSON { response in

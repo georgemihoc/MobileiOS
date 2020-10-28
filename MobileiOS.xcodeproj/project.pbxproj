@@ -22,6 +22,7 @@
 		5ED6E1A62548A7E10083B5AD /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1A52548A7E10083B5AD /* SocketService.swift */; };
 		5ED6E1AF2548F8870083B5AD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1AE2548F8870083B5AD /* Constants.swift */; };
 		5ED6E1B32548FAF30083B5AD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1B22548FAF30083B5AD /* AlertManager.swift */; };
+		5ED6E1B7254990320083B5AD /* ViewControllerNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1B6254990320083B5AD /* ViewControllerNames.swift */; };
 		CB793BD6B3BF073853CBC845 /* Pods_MobileiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8151420E8C5F6E7F1F2A05EC /* Pods_MobileiOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		5ED6E1A52548A7E10083B5AD /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		5ED6E1AE2548F8870083B5AD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5ED6E1B22548FAF30083B5AD /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		5ED6E1B6254990320083B5AD /* ViewControllerNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerNames.swift; sourceTree = "<group>"; };
 		8151420E8C5F6E7F1F2A05EC /* Pods_MobileiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C50F984B8F4EF1B24E559C67 /* Pods-MobileiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileiOS.debug.xcconfig"; path = "Target Support Files/Pods-MobileiOS/Pods-MobileiOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -85,6 +87,7 @@
 			children = (
 				5E0AB064254827BF00529780 /* Symbols.swift */,
 				5ED6E1AE2548F8870083B5AD /* Constants.swift */,
+				5ED6E1B6254990320083B5AD /* ViewControllerNames.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				5E0AB056254826A400529780 /* SecondViewController.swift in Sources */,
 				5E0AB0592548272D00529780 /* SpinnerViewController.swift in Sources */,
 				5E7161512534AF1F00A447DE /* SceneDelegate.swift in Sources */,
+				5ED6E1B7254990320083B5AD /* ViewControllerNames.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

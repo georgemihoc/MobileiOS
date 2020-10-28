@@ -20,7 +20,7 @@ class SocketService<T: Codable>: WebSocketDelegate {
     
     // MARK: - Private properties
     
-    private let socket = WebSocket(url: URL(string: "http://127.0.0.1:3000")!)
+    private let socket = WebSocket(url: URL(string: Constants.nodeApi)!)
     
     // MARK: - Public properties
     
