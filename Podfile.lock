@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (5.3.0)
+  - BRYXBanner (0.8.4)
+  - Starscream (3.0.6)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.2)
+  - BRYXBanner
+  - Starscream (~> 3.0.2)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - BRYXBanner
+    - Starscream
+
+SPEC CHECKSUMS:
+  Alamofire: 2c792affbdc2f18016e08fdbcacd60aebe1ba593
+  BRYXBanner: 4fbd266f96ce000e4c6cc9a0558c446bd88d9801
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+
+PODFILE CHECKSUM: dbacaea1aa4b2b558a4c3be4a970648657bd8e2d
+
+COCOAPODS: 1.9.3
