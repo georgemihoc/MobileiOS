@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct Constants {
-    static let key = "tweets"
-}
-
 class Defaults {
     
     static func store(_ colors: [Tweet]) {
@@ -20,7 +16,7 @@ class Defaults {
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(colors)
-            defaults.set(data, forKey: Constants.key)
+            defaults.set(data, forKey: "tweets")
         } catch {
             print(error)
         }
@@ -29,7 +25,7 @@ class Defaults {
     static func get() -> [Tweet]? {
         
         let defaults = UserDefaults.standard
-        let data = defaults.data(forKey: Constants.key)
+        let data = defaults.data(forKey: "tweets")
         
         let decoder = JSONDecoder()
 

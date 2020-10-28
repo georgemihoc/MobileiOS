@@ -7,77 +7,76 @@
 //
 
 import UIKit
+import Starscream
+import BRYXBanner
 
 class ViewController: UIViewController {
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     let child = SpinnerViewController()
     
-    var tweets: [Tweet] = []
-   
+    var items: [Item] = []
+    
+    private let socketService = SocketService<MessageObject>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = UIRefreshControl()
         
-//        Clear defaults for testing
-//        resetDefaults()
+        //        Clear defaults for testing
+        //        resetDefaults()
         
-        if Defaults.get() != nil{
-            tweets = Defaults.get()!
-        } else{
-            showLoadingSpinner()
-            download()
-            hideLoadingSpinner()
+        getUIReady()
+        fetchData()
+        
+        listenToWebSocket()
+        
+    }
+    
+    private func listenToWebSocket() {
+        socketService.didRecieveObject = {[weak self] object in
+            guard let strongSelf = self else { return }
+            strongSelf.items.append(object.payload.item)
+            strongSelf.tableView.reloadData()
+            
+            AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.item.text)
+            strongSelf.tableView.flashScrollIndicators()
         }
-        
-        tableView.reloadData()
     }
 }
-
 
 //MARK: - UI Controls
 extension ViewController{
     func showLoadingSpinner(){
-           addChild(child)
-           child.view.frame = view.frame
-           view.addSubview(child.view)
-           child.didMove(toParent: self)
-       }
-       
-       func hideLoadingSpinner(){
-           // aici ascund spinner-ul, am pus 2 secunde ca sa fie vizibil
-           DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-               self.child.willMove(toParent: nil)
-               self.child.view.removeFromSuperview()
-               self.child.removeFromParent()
-                  }
-       }
+        addChild(child)
+        child.view.frame = view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
     
-       @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
-           switch segmentedControl.selectedSegmentIndex {
-           case 0:
-               tweets = tweets.sorted(by: { $0.from.lowercased() < $1.from.lowercased() })
-           case 1:
-               tweets = tweets.sorted(by: { $0.message.count < $1.message.count })
-           default:
-                tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
-           }
-           tableView.reloadData()
-       }
+    func hideLoadingSpinner(){
+        // aici ascund spinner-ul, am pus 2 secunde ca sa fie vizibil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.child.willMove(toParent: nil)
+            self.child.view.removeFromSuperview()
+            self.child.removeFromParent()
+        }
+    }
+    
 }
 
 //MARK: - Networking & others
 extension ViewController{
     
     func download(){
-        Networking.download { [weak self] downloadedTweets in
-            self?.tweets = downloadedTweets
-
-            Defaults.store(downloadedTweets)
-
+        Networking.download { [weak self] downloadedItems in
+            self?.items = downloadedItems
+            
+            //            Defaults.store(downloadedItems)
+            
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
@@ -110,32 +109,24 @@ extension ViewController{
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tweets.count
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell") as? TableViewCell
-        cell?.nameLabel.text = tweets[indexPath.row].from
-        cell?.handlerLabel.text = tweets[indexPath.row].handler
+        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
+        cell?.textLabel?.text = items[indexPath.row].text
+        cell?.detailTextLabel?.text = formatDate(str: items[indexPath.row].date)
         
-        if let intervalData = TimeInterval(tweets[indexPath.row].timestamp){
-            cell?.dataLabel.text = getReadableDate(timeStamp: intervalData)
-        }
-        
-        let textData = Symbols.detectSymbols(text: tweets[indexPath.row].message)
-        cell?.messageLabel.attributedText = textData
+        //        print(indexPath.row)
         
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! TableViewCell
         
         if let viewController = storyboard?.instantiateViewController(identifier: "SecondViewController") as? SecondViewController {
-            viewController.name = cell.nameLabel.text ?? ""
-            viewController.handler = cell.handlerLabel.text ?? ""
-            viewController.data = cell.dataLabel.text ?? ""
-            viewController.message = cell.messageLabel.text ?? ""
+            viewController.name = items[indexPath.row].text
+            viewController.data = items[indexPath.row].date
             
             navigationController?.pushViewController(viewController,animated: true)
             
@@ -143,6 +134,27 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //MARK: -  Pull to refresh users table
+    @objc func refresh(sender: AnyObject)
+    {
+        download()
+        tableView.reloadData()
+        tableView.refreshControl?.endRefreshing()
+    }
+}
+
+extension ViewController {
+    func fetchData() {
+        if Defaults.get() != nil{
+            //            tweets = Defaults.get()!
+        } else{
+            showLoadingSpinner()
+            download()
+            hideLoadingSpinner()
+        }
+        
     }
 }
 
@@ -153,4 +165,42 @@ class TableViewCell: UITableViewCell{
     @IBOutlet weak var handlerLabel: UILabel!
     @IBOutlet weak var dataLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
+}
+
+extension ViewController {
+    
+    func getUIReady() {
+        // Add pull to refresh functionality to tableview
+        self.tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        
+        // Add hide keyboard functionality to the view controller
+        self.hideKeyboardWhenTappedAround()
+    }
+}
+
+//MARK: - UIViewController extension for dismissing the keyboard when tapped around
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+//MARK: - Date extension
+extension ViewController {
+    func formatDate(str: String) -> String{
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        if let date = dateFormatter.date(from: str) {
+            return date.description  // "2015-05-15 21:58:00 +0000"
+        }
+        return ""
+    }
 }
