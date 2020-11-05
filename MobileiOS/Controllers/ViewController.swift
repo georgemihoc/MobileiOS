@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         tableView.refreshControl = UIRefreshControl()
         
         //        Clear defaults for testing
-        //        resetDefaults()
+        //                resetDefaults()
         
         getUIReady()
         fetchData()
@@ -69,7 +69,9 @@ extension ViewController{
             guard let strongSelf = self else { return }
             strongSelf.items = downloadedItems
             
-            //            Defaults.store(downloadedItems)
+            // reset defaults before downloading
+            strongSelf.resetDefaults()
+            Defaults.store(downloadedItems)
             strongSelf.listenToWebSocket()
             DispatchQueue.main.async {
                 strongSelf.tableView.reloadData()
@@ -152,12 +154,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
 extension ViewController {
     func fetchData() {
         if Defaults.get() != nil{
-            //            tweets = Defaults.get()!
-        } else{
-            showLoadingSpinner()
-            download()
-            hideLoadingSpinner()
+            items = Defaults.get()!
+            print("GOT INFO FROM USER DEFAULTS")
         }
+        
+        showLoadingSpinner()
+        download()
+        hideLoadingSpinner()
         
     }
 }
@@ -165,7 +168,7 @@ extension ViewController {
 //MARK: - Date extension
 extension ViewController {
     func formatDate(str: String) -> String{
-
+        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .init(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"

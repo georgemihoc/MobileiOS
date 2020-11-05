@@ -10,32 +10,32 @@ import Foundation
 
 class Defaults {
     
-    static func store(_ colors: [Tweet]) {
+    static func store(_ items: [Item]) {
         let defaults = UserDefaults.standard
         
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(colors)
-            defaults.set(data, forKey: "tweets")
+            let data = try encoder.encode(items)
+            defaults.set(data, forKey: "items")
         } catch {
             print(error)
         }
     }
     
-    static func get() -> [Tweet]? {
+    static func get() -> [Item]? {
         
         let defaults = UserDefaults.standard
-        let data = defaults.data(forKey: "tweets")
+        let data = defaults.data(forKey: "items")
         
         let decoder = JSONDecoder()
 
-        guard let tweetsData = data else {
+        guard let itemsData = data else {
             return nil
         }
         
         do {
-            let tweets = try decoder.decode([Tweet].self, from: tweetsData)
-            return tweets
+            let items = try decoder.decode([Item].self, from: itemsData)
+            return items
         } catch {
             print(error.localizedDescription)
         }
