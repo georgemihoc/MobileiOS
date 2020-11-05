@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     
     var items: [Item] = []
     
-    private let socketService = SocketService<MessageObject>()
+//    private var socketService = SocketService<MessageObject>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +70,7 @@ extension ViewController{
             strongSelf.items = downloadedItems
             
             // reset defaults before downloading
-            strongSelf.resetDefaults()
+            Defaults.manager.resetDefaults()
             Defaults.store(downloadedItems)
             strongSelf.listenToWebSocket()
             DispatchQueue.main.async {
@@ -92,23 +92,19 @@ extension ViewController{
             return dateFormatter.string(from: date)
         }
     }
-    
-    func resetDefaults() {
-        let defaults = UserDefaults.standard
-        let dictionary = defaults.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            defaults.removeObject(forKey: key)
-        }
-    }
-    
+        
     private func listenToWebSocket() {
-        socketService.didRecieveObject = {[weak self] object in
+        SocketService.socketService.didRecieveObject = {[weak self] object in
             guard let strongSelf = self else { return }
             strongSelf.items.append(object.payload.item)
             strongSelf.tableView.reloadData()
             
+//            Defaults.manager.resetDefaults()
+//            Defaults.append(object.payload.item)
+            
             AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.item.text)
             strongSelf.tableView.flashScrollIndicators()
+            strongSelf.scrollToBottom()
         }
     }
 }
@@ -146,8 +142,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     //MARK: -  Pull to refresh users table
     @objc func refresh(sender: AnyObject)
     {
+//        self.socketService = SocketService<MessageObject>()
         download()
         tableView.refreshControl?.endRefreshing()
+    }
+    
+    func scrollToBottom(){
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: self.items.count-1, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
     }
 }
 

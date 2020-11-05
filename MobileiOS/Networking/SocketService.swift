@@ -11,12 +11,16 @@ import Starscream
 struct Payload: Codable {
     let item: Item
 }
+
 struct MessageObject: Codable {
     let event: String
     let payload: Payload
 }
 
-class SocketService<T: Codable>: WebSocketDelegate {
+class SocketService: WebSocketDelegate {
+    
+    
+    static let socketService = SocketService()
     
     // MARK: - Private properties
     
@@ -24,7 +28,7 @@ class SocketService<T: Codable>: WebSocketDelegate {
     
     // MARK: - Public properties
     
-    var didRecieveObject: (T) -> Void = { object in }
+    var didRecieveObject: (MessageObject) -> Void = { object in }
     
     // MARK: - Lifecycle
     
@@ -37,6 +41,7 @@ class SocketService<T: Codable>: WebSocketDelegate {
     
     func websocketDidConnect(socket: WebSocketClient) {
         print("Did connect")
+        AlertManager.manager.showBannerNotification(title: "Connected", message: "You are connected to the server!")
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -44,7 +49,7 @@ class SocketService<T: Codable>: WebSocketDelegate {
         
         if let data = text.data(using: .utf8, allowLossyConversion: false) {
             do {
-                let object = try JSONDecoder().decode(T.self, from: data)
+                let object = try JSONDecoder().decode(MessageObject.self, from: data)
                 didRecieveObject(object)
             } catch {
                 print(error)
@@ -54,6 +59,7 @@ class SocketService<T: Codable>: WebSocketDelegate {
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected: \(String(describing: error?.localizedDescription))")
+        AlertManager.manager.showDisconnectedBannerNotification(title: "Network error", message: "Could not establish server connection")
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {

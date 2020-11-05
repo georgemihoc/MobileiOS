@@ -10,12 +10,31 @@ import Foundation
 
 class Defaults {
     
+    static let manager = Defaults()
+    
+    private init() {}
+    
     static func store(_ items: [Item]) {
         let defaults = UserDefaults.standard
         
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(items)
+            defaults.set(data, forKey: "items")
+        } catch {
+            print(error)
+        }
+    }
+    
+    static func append(_ item: Item) {
+        let defaults = UserDefaults.standard
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            var currentDefaultsItems = get()
+            currentDefaultsItems?.append(item)
+            let data = try encoder.encode(currentDefaultsItems)
             defaults.set(data, forKey: "items")
         } catch {
             print(error)
@@ -41,5 +60,13 @@ class Defaults {
         }
         
         return nil
+    }
+    
+    func resetDefaults() {
+        let defaults = UserDefaults.standard
+        let dictionary = defaults.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            defaults.removeObject(forKey: key)
+        }
     }
 }

@@ -9,5 +9,8 @@ import Foundation
 
 struct ViewControllerNames{
     
+    static let loginViewController = "LoginViewController"
+    static let mainViewController = "MainViewController"
     static let secondViewController = "SecondViewController"
+    static let navigationController = "NavigationController"
 }
