@@ -59,7 +59,7 @@ class SocketService: WebSocketDelegate {
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected: \(String(describing: error?.localizedDescription))")
-        AlertManager.manager.showDisconnectedBannerNotification(title: "Network error", message: "Could not establish server connection")
+        AlertManager.manager.showDisconnectedBannerNotification(title: "Network error", message: "Could not establish server connection", duration: 3)
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {

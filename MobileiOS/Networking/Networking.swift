@@ -42,13 +42,17 @@ class Networking {
     static let shared = Networking()
     
      let headers: HTTPHeaders = [
-        "Authorization": "Bearer \(NavigationManager.manager.currentUserToken)",
+        "Authorization": "Bearer \(Defaults.manager.getCurrentToken())",
         "Content-Type": "application/json"
     ]
     
      func download(completion: @escaping ([Note]) -> Void) {
         
-        AF.request(Constants.nodeApi, method: .get, headers: headers).responseJSON { response in
+        AF.request(Constants.nodeApi, method: .get, headers: headers).response { response in
+            if response.error != nil {
+                AlertManager.manager.showDisconnectedBannerNotification(title: "Network Error", message: "Could not fetch data", duration: 1)
+                return
+            }
             if let data = response.data {
                 do {
                     let itemsArray = try JSONDecoder().decode([Note].self, from: data)
@@ -58,40 +62,43 @@ class Networking {
                 }
             }
         }
+        
     }
     
      func createItem(text: String) {
-        
-        print(text)
-        
+                
         let parameters: [String : Any] =
             ["text" : text]
        
         AF.request(Constants.nodeApi, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
-            print(response)
+            if response.error != nil {
+                AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Could not add item", duration: 1)
+                return
+            }
         }
     }
     
-    func login(parameters: [String: Any], currentViewController: UIViewController) {
-        AF.request(Constants.authApi, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .responseJSON { response in
-                print(response)
-                switch response.result {
-                case .success(_):
-                    guard let jsonData = try? JSONDecoder().decode(JSONResponse.self, from: response.data!) else { return
-                    }
-                    guard let token = jsonData.token else {
-                        AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Invalid credentials")
-                        return
-                    }
-                    
-                    NavigationManager.manager.currentUserToken = token
-                    
-                    NavigationManager.manager.navigateToNavigationController(currentViewController: currentViewController)
-                case .failure(_):
-                    AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Network error")
-                }
-            }
-    }
+//    func login(parameters: [String: Any], currentViewController: UIViewController) {
+//        AF.request(Constants.authApi, method: .post, parameters: parameters, encoding: JSONEncoding.default)
+//            .responseJSON { response in
+//                print(response)
+//                switch response.result {
+//                case .success(_):
+//                    guard let jsonData = try? JSONDecoder().decode(JSONResponse.self, from: response.data!) else { return
+//                    }
+//                    guard let token = jsonData.token else {
+//                        AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Invalid credentials")
+//                        return
+//                    }
+//
+//                    Defaults.manager.storeToken(token: token)
+////                    NavigationManager.manager.currentUserToken = token
+//
+//                    NavigationManager.manager.navigateToNavigationController(currentViewController: currentViewController)
+//                case .failure(_):
+//                    AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Network error")
+//                }
+//            }
+//    }
     
 }

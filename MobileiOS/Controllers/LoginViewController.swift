@@ -19,7 +19,15 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("TOKEN ******************")
+        print(Defaults.manager.getCurrentToken())
+        if Defaults.manager.getCurrentToken() != "" {
+//            NavigationManager.manager.navigateToNavigationController(currentViewController: self)
+            DispatchQueue.main.async {
+                NavigationManager.manager.navigateToNavigationController(currentViewController: self)
+            }
+            
+        }
     }
     @IBAction func loginButtonPressed(_ sender: UIButton) {
         guard
@@ -52,7 +60,10 @@ class LoginViewController: UIViewController {
                     }
 
                     self.logger.log("TOKEN: \(token)")
-                    NavigationManager.manager.currentUserToken = token
+                    Defaults.manager.storeToken(token: token)
+                    print("************************************************")
+                    print(Defaults.manager.getCurrentToken())
+                    print("************************************************")
 
                     NavigationManager.manager.navigateToNavigationController(currentViewController: self)
                 case .failure(_):

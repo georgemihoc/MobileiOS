@@ -17,6 +17,10 @@ class ViewController: UIViewController {
     
     var items: [Item] = []
     var notes: [Note] = []
+    private var filtered: [Note] = []
+    private var searchActive : Bool = false
+    
+    @IBOutlet weak var searchController: UISearchBar!
     
 //    private var socketService = SocketService<MessageObject>()
     
@@ -25,6 +29,7 @@ class ViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        searchController.delegate = self
         tableView.refreshControl = UIRefreshControl()
         
         //        Clear defaults for testing
@@ -34,6 +39,7 @@ class ViewController: UIViewController {
         fetchData()
     }
     @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
+        Defaults.manager.resetToken()
         NavigationManager.manager.navigateToLoginViewController(currentViewController: self)
     }
     
@@ -123,15 +129,24 @@ extension ViewController{
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchActive {
+            return filtered.count
+        }
         return notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
-        cell?.textLabel?.text = notes[indexPath.row].text
-        cell?.detailTextLabel?.text = notes[indexPath.row].userId
         
-        //        print(indexPath.row)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
+        
+        if !searchActive {
+            cell?.textLabel?.text = notes[indexPath.row].text
+            cell?.detailTextLabel?.text = notes[indexPath.row].userId
+        } else {
+            cell?.textLabel?.text = filtered[indexPath.row].text
+            cell?.detailTextLabel?.text = filtered[indexPath.row].userId
+        }
         
         return cell!
     }
@@ -237,4 +252,36 @@ extension ViewController {
         self.present(alert, animated:true, completion: nil)
 
     }
+}
+
+//MARK: - SearchBar Controls
+extension ViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if searchBar.text == "" {
+            searchActive = false
+        } else {
+            searchActive = true
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filtered = notes.filter({ (note) -> Bool in
+            
+            // Search by First name
+            let tmp = note.text
+            let range = tmp.range(of: searchText, options: .caseInsensitive)
+            
+            
+            return range != nil
+        })
+        
+        if searchBar.text == "" {
+            searchActive = false
+        } else {
+            searchActive = true
+        }
+        self.tableView.reloadData()
+    }
+    
 }

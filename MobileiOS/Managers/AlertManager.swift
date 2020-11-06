@@ -19,10 +19,10 @@ class AlertManager {
         banner.show(duration: 3.0)
     }
     
-    func showDisconnectedBannerNotification(title: String, message: String) {
+    func showDisconnectedBannerNotification(title: String, message: String, duration: Double) {
         let banner = Banner(title:title, subtitle: message, backgroundColor: #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1))
         banner.dismissesOnTap = true
-        banner.show(duration: 100)
+        banner.show(duration: duration)
     }
     
     func showAlert(currentViewController: UIViewController, message: String) {

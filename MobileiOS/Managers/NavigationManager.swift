@@ -9,7 +9,7 @@ import UIKit
 
 class NavigationManager{
     
-    var currentUserToken: String = ""
+//    var currentUserToken: String = ""
     
     static let manager = NavigationManager()
     
@@ -27,7 +27,6 @@ class NavigationManager{
     }
     
     func navigateToLoginViewController(currentViewController: UIViewController) {
-        currentUserToken = ""
         let loginViewController = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.loginViewController)
         currentViewController.view.window?.rootViewController = loginViewController
         currentViewController.view.window?.makeKeyAndVisible()
