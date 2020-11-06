@@ -9,12 +9,14 @@
 import UIKit
 import Starscream
 import BRYXBanner
+import IHProgressHUD
 
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     let child = SpinnerViewController()
     
     var items: [Item] = []
+    var notes: [Note] = []
     
 //    private var socketService = SocketService<MessageObject>()
     
@@ -31,6 +33,13 @@ class ViewController: UIViewController {
         getUIReady()
         fetchData()
     }
+    @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
+        NavigationManager.manager.navigateToLoginViewController(currentViewController: self)
+    }
+    
+    @IBAction func newItemButtonPressed(_ sender: UIBarButtonItem) {
+        alertWithTF()
+    }
 }
 
 //MARK: - UI Controls
@@ -43,8 +52,7 @@ extension ViewController{
     }
     
     func hideLoadingSpinner(){
-        // aici ascund spinner-ul, am pus 2 secunde ca sa fie vizibil
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.child.willMove(toParent: nil)
             self.child.view.removeFromSuperview()
             self.child.removeFromParent()
@@ -65,9 +73,11 @@ extension ViewController{
 extension ViewController{
     
     func download(){
-        Networking.download { [weak self] downloadedItems in
+        IHProgressHUD.show()
+        Networking.shared.download { [weak self] downloadedItems in
             guard let strongSelf = self else { return }
-            strongSelf.items = downloadedItems
+            print(downloadedItems)
+            strongSelf.notes = downloadedItems
             
             // reset defaults before downloading
             Defaults.manager.resetDefaults()
@@ -77,6 +87,7 @@ extension ViewController{
                 strongSelf.tableView.reloadData()
             }
         }
+        IHProgressHUD.dismiss()
     }
     
     func getReadableDate(timeStamp: TimeInterval) -> String? {
@@ -96,13 +107,13 @@ extension ViewController{
     private func listenToWebSocket() {
         SocketService.socketService.didRecieveObject = {[weak self] object in
             guard let strongSelf = self else { return }
-            strongSelf.items.append(object.payload.item)
+            strongSelf.notes.append(object.payload.note)
             strongSelf.tableView.reloadData()
             
 //            Defaults.manager.resetDefaults()
 //            Defaults.append(object.payload.item)
             
-            AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.item.text)
+            AlertManager.manager.showBannerNotification(title: "New item received", message: object.payload.note.text)
             strongSelf.tableView.flashScrollIndicators()
             strongSelf.scrollToBottom()
         }
@@ -112,13 +123,13 @@ extension ViewController{
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
-        cell?.textLabel?.text = items[indexPath.row].text
-        cell?.detailTextLabel?.text = formatDate(str: items[indexPath.row].date)
+        cell?.textLabel?.text = notes[indexPath.row].text
+        cell?.detailTextLabel?.text = notes[indexPath.row].userId
         
         //        print(indexPath.row)
         
@@ -128,8 +139,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let viewController = storyboard?.instantiateViewController(identifier: ViewControllerNames.secondViewController) as? SecondViewController {
-            viewController.name = items[indexPath.row].text
-            viewController.data = items[indexPath.row].date
+            viewController.name = notes[indexPath.row].text
+            viewController.data = notes[indexPath.row].userId
             
             navigationController?.pushViewController(viewController,animated: true)
             
@@ -149,7 +160,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func scrollToBottom(){
         DispatchQueue.main.async {
-            let indexPath = IndexPath(row: self.items.count-1, section: 0)
+            let indexPath = IndexPath(row: self.notes.count - 1, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
@@ -158,14 +169,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
 extension ViewController {
     func fetchData() {
         if Defaults.get() != nil{
-            items = Defaults.get()!
+            notes = Defaults.get()!
             print("GOT INFO FROM USER DEFAULTS")
         }
         
-        showLoadingSpinner()
         download()
-        hideLoadingSpinner()
-        
     }
 }
 
@@ -193,5 +201,40 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension ViewController {
+    func alertWithTF() {
+        //Step : 1
+        let alert = UIAlertController(title: "New Item", message: "", preferredStyle: UIAlertController.Style.alert )
+        //Step : 2
+        let save = UIAlertAction(title: "Save", style: .default) { (alertAction) in
+            let textField = alert.textFields![0] as UITextField
+
+            guard let text = textField.text else { return }
+            guard text != "" else {
+                AlertManager.manager.showAlert(currentViewController: self, message: "Please enter text")
+                return
+            }
+            Networking.shared.createItem(text: text)
+        }
+
+        //Step : 3
+        //For first TF
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter text"
+        }
+
+        //Step : 4
+        alert.addAction(save)
+        //Cancel action
+        let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in }
+        alert.addAction(cancel)
+        //OR single line action
+        //alert.addAction(UIAlertAction(title: "Cancel", style: .default) { (alertAction) in })
+
+        self.present(alert, animated:true, completion: nil)
+
     }
 }

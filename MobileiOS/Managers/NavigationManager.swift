@@ -9,6 +9,8 @@ import UIKit
 
 class NavigationManager{
     
+    var currentUserToken: String = ""
+    
     static let manager = NavigationManager()
     
     private init() {}
@@ -22,5 +24,13 @@ class NavigationManager{
         let homeViewController = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.navigationController) as? UINavigationController
         currentViewController.view.window?.rootViewController = homeViewController
         currentViewController.view.window?.makeKeyAndVisible()
+    }
+    
+    func navigateToLoginViewController(currentViewController: UIViewController) {
+        currentUserToken = ""
+        let loginViewController = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.loginViewController)
+        currentViewController.view.window?.rootViewController = loginViewController
+        currentViewController.view.window?.makeKeyAndVisible()
+        
     }
 }

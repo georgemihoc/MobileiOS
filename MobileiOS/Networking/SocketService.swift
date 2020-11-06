@@ -9,7 +9,7 @@ import Foundation
 import Starscream
 
 struct Payload: Codable {
-    let item: Item
+    let note: Note
 }
 
 struct MessageObject: Codable {

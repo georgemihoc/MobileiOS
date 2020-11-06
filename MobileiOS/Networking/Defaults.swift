@@ -14,47 +14,47 @@ class Defaults {
     
     private init() {}
     
-    static func store(_ items: [Item]) {
+    static func store(_ notes: [Note]) {
         let defaults = UserDefaults.standard
         
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(items)
-            defaults.set(data, forKey: "items")
+            let data = try encoder.encode(notes)
+            defaults.set(data, forKey: "notes")
         } catch {
             print(error)
         }
     }
     
-    static func append(_ item: Item) {
+    static func append(_ note: Note) {
         let defaults = UserDefaults.standard
         
         let encoder = JSONEncoder()
         
         do {
             var currentDefaultsItems = get()
-            currentDefaultsItems?.append(item)
+            currentDefaultsItems?.append(note)
             let data = try encoder.encode(currentDefaultsItems)
-            defaults.set(data, forKey: "items")
+            defaults.set(data, forKey: "notes")
         } catch {
             print(error)
         }
     }
     
-    static func get() -> [Item]? {
+    static func get() -> [Note]? {
         
         let defaults = UserDefaults.standard
-        let data = defaults.data(forKey: "items")
+        let data = defaults.data(forKey: "notes")
         
         let decoder = JSONDecoder()
 
-        guard let itemsData = data else {
+        guard let notesData = data else {
             return nil
         }
         
         do {
-            let items = try decoder.decode([Item].self, from: itemsData)
-            return items
+            let notes = try decoder.decode([Note].self, from: notesData)
+            return notes
         } catch {
             print(error.localizedDescription)
         }

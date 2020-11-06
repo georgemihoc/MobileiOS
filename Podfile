@@ -7,6 +7,7 @@ target 'MobileiOS' do
   pod 'Alamofire', '~> 5.2'
   pod 'Starscream', '~> 3.0.2'
   pod 'BRYXBanner'
+  pod 'IHProgressHUD', :git => 'https://github.com/Swiftify-Corp/IHProgressHUD.git'
 
   # Pods for MobileiOS
 

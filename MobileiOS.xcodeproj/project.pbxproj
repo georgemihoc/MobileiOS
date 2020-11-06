@@ -19,6 +19,7 @@
 		5E343CF125544B8D0031CD52 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = 5E343CF025544B8D0031CD52 /* users.json */; };
 		5E343CF425544BBB0031CD52 /* DatabaseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CF325544BBB0031CD52 /* DatabaseModels.swift */; };
 		5E343CF725544D750031CD52 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CF625544D750031CD52 /* DatabaseManager.swift */; };
+		5E343D06255471070031CD52 /* JSONResponseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343D05255471070031CD52 /* JSONResponseTypes.swift */; };
 		5E71614F2534AF1F00A447DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E71614E2534AF1F00A447DE /* AppDelegate.swift */; };
 		5E7161512534AF1F00A447DE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7161502534AF1F00A447DE /* SceneDelegate.swift */; };
 		5E7161532534AF1F00A447DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7161522534AF1F00A447DE /* ViewController.swift */; };
@@ -47,6 +48,7 @@
 		5E343CF025544B8D0031CD52 /* users.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
 		5E343CF325544BBB0031CD52 /* DatabaseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseModels.swift; sourceTree = "<group>"; };
 		5E343CF625544D750031CD52 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		5E343D05255471070031CD52 /* JSONResponseTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONResponseTypes.swift; sourceTree = "<group>"; };
 		5E71614B2534AF1F00A447DE /* MobileiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E71614E2534AF1F00A447DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E7161502534AF1F00A447DE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			children = (
 				5E343CEC255443100031CD52 /* User.swift */,
 				5E343CF325544BBB0031CD52 /* DatabaseModels.swift */,
+				5E343D05255471070031CD52 /* JSONResponseTypes.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E343D06255471070031CD52 /* JSONResponseTypes.swift in Sources */,
 				5E343CF425544BBB0031CD52 /* DatabaseModels.swift in Sources */,
 				5ED6E1A62548A7E10083B5AD /* SocketService.swift in Sources */,
 				5ED6E1AF2548F8870083B5AD /* Constants.swift in Sources */,
