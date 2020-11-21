@@ -41,12 +41,12 @@ class Networking {
     
     static let shared = Networking()
     
-     let headers: HTTPHeaders = [
-        "Authorization": "Bearer \(Defaults.manager.getCurrentToken())",
-        "Content-Type": "application/json"
-    ]
-    
      func download(completion: @escaping ([Note]) -> Void) {
+        
+        let headers: HTTPHeaders = [
+           "Authorization": "Bearer \(Defaults.manager.getCurrentToken())",
+           "Content-Type": "application/json"
+       ]
         
         AF.request(Constants.nodeApi, method: .get, headers: headers).response { response in
             if response.error != nil {
@@ -66,6 +66,11 @@ class Networking {
     }
     
      func createItem(text: String) {
+        
+        let headers: HTTPHeaders = [
+           "Authorization": "Bearer \(Defaults.manager.getCurrentToken())",
+           "Content-Type": "application/json"
+       ]
                 
         let parameters: [String : Any] =
             ["text" : text]
