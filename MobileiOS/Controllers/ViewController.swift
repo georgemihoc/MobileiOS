@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     private var searchActive : Bool = false
     
     @IBOutlet weak var searchController: UISearchBar!
+    var timer, timer2: Timer?
+    @IBOutlet weak var internetStatusLabel: UILabel!
     
 //    private var socketService = SocketService<MessageObject>()
     
@@ -38,8 +40,13 @@ class ViewController: UIViewController {
         getUIReady()
         fetchData()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        checkConnection()
+    }
+    
     @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
         Defaults.manager.resetToken()
+        Defaults.manager.resetDefaults()
         NavigationManager.manager.navigateToLoginViewController(currentViewController: self)
     }
     
@@ -71,6 +78,8 @@ extension ViewController{
         
         // Add hide keyboard functionality to the view controller
         self.hideKeyboardWhenTappedAround()
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkConnection), userInfo: nil, repeats: true)
     }
     
 }
@@ -78,7 +87,7 @@ extension ViewController{
 //MARK: - Networking & others
 extension ViewController{
     
-    func download(){
+    @objc func download(){
         IHProgressHUD.show()
         Networking.shared.download { [weak self] downloadedItems in
             guard let strongSelf = self else { return }
@@ -154,8 +163,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let viewController = storyboard?.instantiateViewController(identifier: ViewControllerNames.secondViewController) as? SecondViewController {
-            viewController.name = notes[indexPath.row].text
-            viewController.data = notes[indexPath.row].userId
+            if !searchActive {
+                viewController.name = notes[indexPath.row].text
+                viewController.data = notes[indexPath.row].userId
+            } else {
+                viewController.name = filtered[indexPath.row].text
+                viewController.data = filtered[indexPath.row].userId
+            }
             
             navigationController?.pushViewController(viewController,animated: true)
             
@@ -284,4 +298,26 @@ extension ViewController: UISearchBarDelegate {
         self.tableView.reloadData()
     }
     
+}
+
+//MARK: - Offline support & network status
+extension ViewController{
+    @objc func checkConnection() {
+        if Reachability.isConnectedToNetwork() {
+            internetStatusLabel.text = "Online"
+            internetStatusLabel.textColor = UIColor.green
+            print("Network status: CONNECTED")
+            //        if toBeSent.count > 0 {
+            //            for item in toBeSent {
+            //                viewModel.postOrder(order: item)
+            ////                    orderTableView.reloadData()
+            //            }
+            //            toBeSent.removeAll()
+            //        }
+        } else {
+            internetStatusLabel.text = "Disconnected"
+            internetStatusLabel.textColor = UIColor.red
+            print("Network status: DISCONNECTED")
+        }
+    }
 }

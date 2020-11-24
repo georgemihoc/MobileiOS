@@ -8,6 +8,7 @@ target 'MobileiOS' do
   pod 'Starscream', '~> 3.0.2'
   pod 'BRYXBanner'
   pod 'IHProgressHUD', :git => 'https://github.com/Swiftify-Corp/IHProgressHUD.git'
+  pod 'IQKeyboardManagerSwift'
 
   # Pods for MobileiOS
 
