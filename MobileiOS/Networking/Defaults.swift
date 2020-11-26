@@ -114,4 +114,40 @@ class Defaults {
             }
         }
     }
+    
+    func appendOfflineNote(_ offlineNote: OfflineNote) {
+        let defaults = UserDefaults.standard
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            var currentDefaultsItems = getOfflineAddedItems()
+            currentDefaultsItems?.append(offlineNote)
+            let data = try encoder.encode(currentDefaultsItems)
+            defaults.set(data, forKey: "offlineNotes")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getOfflineAddedItems() -> [OfflineNote]? {
+        
+        let defaults = UserDefaults.standard
+        let data = defaults.data(forKey: "offlineNotes")
+        
+        let decoder = JSONDecoder()
+
+        guard let notesData = data else {
+            return []
+        }
+        
+        do {
+            let notes = try decoder.decode([OfflineNote].self, from: notesData)
+            return notes
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return []
+    }
 }

@@ -34,4 +34,13 @@ class AlertManager {
         currentViewController.present(alertController, animated: true, completion: nil)
     }
     
+    func showGeneralAlert(currentViewController: UIViewController, title: String, message: String) {
+        
+        let alertController = UIAlertController(title: title, message:
+            message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default))
+        
+        currentViewController.present(alertController, animated: true, completion: nil)
+    }
+    
 }

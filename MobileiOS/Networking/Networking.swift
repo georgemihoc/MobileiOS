@@ -37,6 +37,10 @@ struct Note: Codable {
     let _id: String
 }
 
+struct OfflineNote: Codable {
+    let text: String
+}
+
 class Networking {
     
     static let shared = Networking()
@@ -77,10 +81,33 @@ class Networking {
        
         AF.request(Constants.nodeApi, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
             if response.error != nil {
-                AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Could not add item", duration: 1)
+                Defaults.manager.appendOfflineNote(OfflineNote(text: text))
+                AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Could not add item, will try again when online", duration: 1)
                 return
             }
         }
+    }
+    
+    func uploadOfflineAddedItems(items: [OfflineNote]) {
+        let headers: HTTPHeaders = [
+           "Authorization": "Bearer \(Defaults.manager.getCurrentToken())",
+           "Content-Type": "application/json"
+       ]
+                
+        print(items.count)
+        for item in items {
+            print(item.text)
+            let parameters: [String : Any] =
+                ["text" : item.text]
+           
+            AF.request(Constants.nodeApi, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
+                if response.error != nil {
+                    AlertManager.manager.showDisconnectedBannerNotification(title: "Error", message: "Could not add item", duration: 1)
+                    return
+                }
+            }
+        }
+        
     }
     
 //    func login(parameters: [String: Any], currentViewController: UIViewController) {

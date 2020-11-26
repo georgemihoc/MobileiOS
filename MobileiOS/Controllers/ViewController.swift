@@ -34,8 +34,8 @@ class ViewController: UIViewController {
         searchController.delegate = self
         tableView.refreshControl = UIRefreshControl()
         
-        //        Clear defaults for testing
-        //                resetDefaults()
+//        Clear defaults for testing
+//        Defaults.manager.resetDefaults()
         
         getUIReady()
         fetchData()
@@ -183,6 +183,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     @objc func refresh(sender: AnyObject)
     {
 //        self.socketService = SocketService<MessageObject>()
+        listenToWebSocket()
         download()
         tableView.refreshControl?.endRefreshing()
     }
@@ -307,6 +308,16 @@ extension ViewController{
             internetStatusLabel.text = "Online"
             internetStatusLabel.textColor = UIColor.green
             print("Network status: CONNECTED")
+            
+            guard let offlineNotes = Defaults.manager.getOfflineAddedItems() else { return }
+            if offlineNotes.count > 0 {
+                Networking.shared.uploadOfflineAddedItems(items: offlineNotes)
+                AlertManager.manager.showGeneralAlert(currentViewController: self, title: "Upload Succesful", message: "Uploaded \(offlineNotes.count) offline added items to the server")
+                Defaults.manager.resetDefaults()
+                download()
+//                AlertManager.manager.showBannerNotification(title: "Uploaded successfully", message: "Offline items added to server")
+            }
+            
             //        if toBeSent.count > 0 {
             //            for item in toBeSent {
             //                viewModel.postOrder(order: item)
