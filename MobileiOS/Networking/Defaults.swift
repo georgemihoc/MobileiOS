@@ -14,13 +14,16 @@ class Defaults {
     
     private init() {}
     
-    func storeToken(token: String) {
+    func storeToken(token: String, username: String) {
         let defaults = UserDefaults.standard
         
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(token)
+            var data = try encoder.encode(token)
             defaults.set(data, forKey: "userToken")
+            
+            data = try encoder.encode(username)
+            defaults.set(data, forKey: "currentUsername")
         } catch {
             print(error)
         }
@@ -30,6 +33,27 @@ class Defaults {
         
         let defaults = UserDefaults.standard
         let data = defaults.data(forKey: "userToken")
+        
+        let decoder = JSONDecoder()
+
+        guard let notesData = data else {
+            return ""
+        }
+        
+        do {
+            let notes = try decoder.decode(String.self, from: notesData)
+            return notes
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return ""
+    }
+    
+    func getCurrentUsername() -> String {
+        
+        let defaults = UserDefaults.standard
+        let data = defaults.data(forKey: "currentUsername")
         
         let decoder = JSONDecoder()
 
@@ -99,7 +123,7 @@ class Defaults {
         let defaults = UserDefaults.standard
         let dictionary = defaults.dictionaryRepresentation()
         dictionary.keys.forEach { key in
-            if key != "userToken"{
+            if key != "userToken" && key != "currentUsername" {
                 defaults.removeObject(forKey: key)
             }
         }
@@ -109,7 +133,7 @@ class Defaults {
         let defaults = UserDefaults.standard
         let dictionary = defaults.dictionaryRepresentation()
         dictionary.keys.forEach { key in
-            if key == "userToken"{
+            if key == "userToken" || key == "currentUsername" {
                 defaults.removeObject(forKey: key)
             }
         }

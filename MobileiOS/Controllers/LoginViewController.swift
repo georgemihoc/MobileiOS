@@ -60,7 +60,7 @@ class LoginViewController: UIViewController {
                     }
 
                     self.logger.log("TOKEN: \(token)")
-                    Defaults.manager.storeToken(token: token)
+                    Defaults.manager.storeToken(token: token, username: username)
                     print("************************************************")
                     print(Defaults.manager.getCurrentToken())
                     print("************************************************")

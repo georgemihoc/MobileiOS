@@ -10,12 +10,13 @@ import UIKit
 import Starscream
 import BRYXBanner
 import IHProgressHUD
+import SwipeCellKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     let child = SpinnerViewController()
     
-    var items: [Item] = []
+//    var items: [Item] = []
     var notes: [Note] = []
     private var filtered: [Note] = []
     private var searchActive : Bool = false
@@ -23,6 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchController: UISearchBar!
     var timer, timer2: Timer?
     @IBOutlet weak var internetStatusLabel: UILabel!
+    @IBOutlet weak var usernameLabel: UILabel!
     
 //    private var socketService = SocketService<MessageObject>()
     
@@ -80,6 +82,8 @@ extension ViewController{
         self.hideKeyboardWhenTappedAround()
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkConnection), userInfo: nil, repeats: true)
+        
+        usernameLabel.text = Defaults.manager.getCurrentUsername()
     }
     
 }
@@ -150,15 +154,104 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
         
         if !searchActive {
-            cell?.textLabel?.text = notes[indexPath.row].text
-            cell?.detailTextLabel?.text = notes[indexPath.row].userId
+            if notes[indexPath.row].completed {
+                cell?.textLabel?.attributedText = notes[indexPath.row].text.strikeThrough()
+                cell?.textLabel?.textColor = .systemGray
+            } else {
+                cell?.textLabel?.attributedText = nil
+                cell?.textLabel?.textColor = .label
+                cell?.textLabel?.text = notes[indexPath.row].text
+            }
         } else {
-            cell?.textLabel?.text = filtered[indexPath.row].text
-            cell?.detailTextLabel?.text = filtered[indexPath.row].userId
+            if filtered[indexPath.row].completed {
+                cell?.textLabel?.attributedText = filtered[indexPath.row].text.strikeThrough()
+                cell?.textLabel?.textColor = .systemGray
+            } else {
+                cell?.textLabel?.attributedText = nil
+                cell?.textLabel?.textColor = .label
+                cell?.textLabel?.text = filtered[indexPath.row].text
+            }
         }
         
         return cell!
     }
+//
+//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+//            // delete item at indexPath
+//            print("DELETE")
+//        }
+//
+//        return [delete]
+//    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        var updatedNote: Note?
+        if !self.searchActive {
+            updatedNote = self.notes[indexPath.row]
+        } else {
+            updatedNote = self.filtered[indexPath.row]
+        }
+        
+        guard var safeUpdatedNote = updatedNote else { return nil }
+        var title: String?
+        if !safeUpdatedNote.completed {
+            title = "Complete"
+        } else {
+            title = "Restore"
+        }
+        if tableView.cellForRow(at: indexPath) != nil {
+            let delete = UIContextualAction(style: .normal, title: title) { (action, view, nil)  in
+                
+                safeUpdatedNote.completed = !safeUpdatedNote.completed
+            
+                Networking.shared.updateNote(note: safeUpdatedNote)
+                let seconds = 0.2
+                IHProgressHUD.show()
+                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                    self.download()
+                    IHProgressHUD.dismiss()
+                }
+                
+            }
+            return UISwipeActionsConfiguration(actions: [delete])
+        }
+       
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if tableView.cellForRow(at: indexPath) != nil {
+            let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, nil)  in
+                
+                var updatedNote: Note?
+                if !self.searchActive {
+                    updatedNote = self.notes[indexPath.row]
+                } else {
+                    updatedNote = self.filtered[indexPath.row]
+                }
+                
+                guard let safeUpdatedNote = updatedNote else { return }
+                
+                // Delete item from server
+                Networking.shared.deleteNote(note: safeUpdatedNote)
+                // Remove also the Firebase picture
+                DatabaseManager.manager.deletePreviousPicture(itemId: safeUpdatedNote._id)
+                            
+                let seconds = 0.2
+                IHProgressHUD.show()
+                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                    self.download()
+                    IHProgressHUD.dismiss()
+                }
+            }
+            return UISwipeActionsConfiguration(actions: [delete])
+        }
+       
+        return nil
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -166,9 +259,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
             if !searchActive {
                 viewController.name = notes[indexPath.row].text
                 viewController.data = notes[indexPath.row].userId
+                viewController.itemId = notes[indexPath.row]._id
             } else {
                 viewController.name = filtered[indexPath.row].text
                 viewController.data = filtered[indexPath.row].userId
+                viewController.itemId = filtered[indexPath.row]._id
             }
             
             navigationController?.pushViewController(viewController,animated: true)
@@ -177,6 +272,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    // Cell Animation
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.6) {
+            cell.transform = CGAffineTransform.identity
+        }
     }
     
     //MARK: -  Pull to refresh users table
@@ -248,12 +351,20 @@ extension ViewController {
                 return
             }
             Networking.shared.createItem(text: text)
+            
+            let seconds = 0.2
+            IHProgressHUD.show()
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                self.download()
+                IHProgressHUD.dismiss()
+            }
         }
 
         //Step : 3
         //For first TF
         alert.addTextField { (textField) in
             textField.placeholder = "Enter text"
+            textField.autocapitalizationType = .sentences
         }
 
         //Step : 4
@@ -330,5 +441,17 @@ extension ViewController{
             internetStatusLabel.textColor = UIColor.red
             print("Network status: DISCONNECTED")
         }
+    }
+}
+
+//MARK: - String extensios
+extension String {
+    func strikeThrough() -> NSAttributedString {
+        let attributeString =  NSMutableAttributedString(string: self)
+        attributeString.addAttribute(
+            NSAttributedString.Key.strikethroughStyle,
+               value: NSUnderlineStyle.single.rawValue,
+                   range:NSMakeRange(0,attributeString.length))
+        return attributeString
     }
 }

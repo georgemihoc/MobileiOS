@@ -9,6 +9,13 @@ target 'MobileiOS' do
   pod 'BRYXBanner'
   pod 'IHProgressHUD', :git => 'https://github.com/Swiftify-Corp/IHProgressHUD.git'
   pod 'IQKeyboardManagerSwift'
+  pod 'SwipeCellKit'
+  
+  # add the Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Storage'
+  # add pods for any other desired Firebase products
+  # https://firebase.google.com/docs/ios/setup#available-pods
 
   # Pods for MobileiOS
 
