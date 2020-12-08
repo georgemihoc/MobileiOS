@@ -131,12 +131,8 @@ class Defaults {
     
     func resetToken() {
         let defaults = UserDefaults.standard
-        let dictionary = defaults.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            if key == "userToken" || key == "currentUsername" {
-                defaults.removeObject(forKey: key)
-            }
-        }
+        defaults.removeObject(forKey: "userToken")
+        defaults.removeObject(forKey: "currentUsername")
     }
     
     func appendOfflineNote(_ offlineNote: OfflineNote) {

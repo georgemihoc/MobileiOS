@@ -96,7 +96,8 @@ extension ViewController{
         Networking.shared.download { [weak self] downloadedItems in
             guard let strongSelf = self else { return }
             print(downloadedItems)
-            strongSelf.notes = downloadedItems
+            let downloadedItemsSorted = downloadedItems.sorted { !$0.completed && $1.completed }
+            strongSelf.notes = downloadedItemsSorted
             
             // reset defaults before downloading
             Defaults.manager.resetDefaults()
