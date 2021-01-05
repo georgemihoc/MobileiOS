@@ -14,6 +14,7 @@
 		5E0AB065254827BF00529780 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AB064254827BF00529780 /* Symbols.swift */; };
 		5E200A3725A24FB400C2C71B /* CoordinatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */; };
 		5E200A9C25A3566C00C2C71B /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */; };
+		5E200A9F25A476EF00C2C71B /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E200A9E25A476EF00C2C71B /* CustomTableViewCell.swift */; };
 		5E2F5D57256BDD93007603D3 /* OfflineSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F5D56256BDD93007603D3 /* OfflineSupport.swift */; };
 		5E343CE325543D1D0031CD52 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CE225543D1D0031CD52 /* CoreDataManager.swift */; };
 		5E343CE6255440670031CD52 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CE5255440670031CD52 /* LoginViewController.swift */; };
@@ -50,6 +51,7 @@
 		5E0AB064254827BF00529780 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesViewController.swift; sourceTree = "<group>"; };
 		5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
+		5E200A9E25A476EF00C2C71B /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		5E2F5D56256BDD93007603D3 /* OfflineSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSupport.swift; sourceTree = "<group>"; };
 		5E343CE225543D1D0031CD52 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		5E343CE5255440670031CD52 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				5EACDE5D2580ED74005AFA93 /* TabBarController.swift */,
 				5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */,
 				5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */,
+				5E200A9E25A476EF00C2C71B /* CustomTableViewCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				5E200A9C25A3566C00C2C71B /* AnimationsViewController.swift in Sources */,
 				5E0AB0612548279400529780 /* Networking.swift in Sources */,
 				5E71614F2534AF1F00A447DE /* AppDelegate.swift in Sources */,
+				5E200A9F25A476EF00C2C71B /* CustomTableViewCell.swift in Sources */,
 				5ED6E1B32548FAF30083B5AD /* AlertManager.swift in Sources */,
 				5E0AB056254826A400529780 /* SecondViewController.swift in Sources */,
 				5E0AB0592548272D00529780 /* SpinnerViewController.swift in Sources */,

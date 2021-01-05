@@ -151,41 +151,71 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         return notes.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0;//Choose your custom row height
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "generalCell") as? CustomTableViewCell
         
         if !searchActive {
             if notes[indexPath.row].completed {
-                cell?.textLabel?.attributedText = notes[indexPath.row].text.strikeThrough()
-                cell?.textLabel?.textColor = .systemGray
+                cell?.textLabelField.attributedText = notes[indexPath.row].text.strikeThrough()
+                cell?.textLabelField.textColor = .systemGray
             } else {
-                cell?.textLabel?.attributedText = nil
-                cell?.textLabel?.textColor = .label
-                cell?.textLabel?.text = notes[indexPath.row].text
+                cell?.textLabelField.attributedText = nil
+                cell?.textLabelField.textColor = .label
+                cell?.textLabelField.text = notes[indexPath.row].text
             }
+            
+            DatabaseManager.manager.getItemPicture(itemId: notes[indexPath.row]._id, completion: { [weak self] result in
+                switch result{
+                case .success(let profilePic):
+                    cell?.imageViewField.image = profilePic
+                default:
+                    print("No image found")
+                    cell?.imageViewField.image = .none
+                }
+            })
+            
         } else {
             if filtered[indexPath.row].completed {
-                cell?.textLabel?.attributedText = filtered[indexPath.row].text.strikeThrough()
-                cell?.textLabel?.textColor = .systemGray
+                cell?.textLabelField.attributedText = filtered[indexPath.row].text.strikeThrough()
+                cell?.textLabelField.textColor = .systemGray
             } else {
-                cell?.textLabel?.attributedText = nil
-                cell?.textLabel?.textColor = .label
-                cell?.textLabel?.text = filtered[indexPath.row].text
+                cell?.textLabelField.attributedText = nil
+                cell?.textLabelField.textColor = .label
+                cell?.textLabelField.text = filtered[indexPath.row].text
             }
+            
+            DatabaseManager.manager.getItemPicture(itemId: filtered[indexPath.row]._id, completion: { [weak self] result in
+                switch result{
+                case .success(let profilePic):
+                    cell?.imageViewField.image = profilePic
+                default:
+                    print("No image found")
+                    cell?.imageViewField.image = .none
+                }
+            })
         }
         
         return cell!
     }
 //
-//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-//        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
-//            // delete item at indexPath
-//            print("DELETE")
-//        }
-//
-//        return [delete]
+//    func downloadItemPicture(itemId: String) {
+//        IHProgressHUD.show()
+//        DatabaseManager.manager.getItemPicture(itemId: itemId, completion: { [weak self] result in
+//            guard let strongSelf = self else { return }
+//            switch result{
+//            case .success(let profilePic):
+//                strongSelf.imageTake.image = profilePic
+//            default:
+//                print("No image found")
+//            }
+//            IHProgressHUD.dismiss()
+//        })
 //    }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
