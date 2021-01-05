@@ -13,4 +13,7 @@ struct ViewControllerNames{
     static let mainViewController = "MainViewController"
     static let secondViewController = "SecondViewController"
     static let navigationController = "NavigationController"
+    static let tabbarController = "TabBarController"
+    static let coordinatesViewController = "CoordinatesViewController"
+    static let navigationController2 = "NavigationController2"
 }

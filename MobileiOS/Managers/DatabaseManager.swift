@@ -8,10 +8,20 @@
 import Foundation
 import UIKit
 import FirebaseStorage
+import FirebaseFirestore
+
+struct Coordinates {
+    let latitude: String
+    let longitude: String
+    let title: String
+    let subtitle: String
+}
 
 class DatabaseManager {
     
     static let manager = DatabaseManager()
+    
+    let db = Firestore.firestore()
     
     func loadJson() -> Users? {
        let decoder = JSONDecoder()
@@ -76,6 +86,40 @@ class DatabaseManager {
                 guard let data = data else { return }
                 guard let image = UIImage(data: data) else { return }
                 completion(.success(image))
+            }
+        }
+    }
+    
+    func markItemLocation(itemId: String, latitude: String, longitude: String, title: String, subtitle: String) {
+        // Add a new document in collection "cities"
+        db.collection("locations").document("\(itemId)").setData([
+            "latitude": latitude,
+            "longitude": longitude,
+            "title" : title,
+            "subtitle" : subtitle
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+    
+    func downloadItemLocation(itemId: String, completion: @escaping (Result<Coordinates, Error>) -> Void) {
+        let docRef = db.collection("locations").document(itemId)
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+//                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                if let latitude = document.data()?["latitude"] as? String, let longitude = document.data()?["longitude"] as? String, let title = document.data()?["title"] as? String, let subtitle = document.data()?["subtitle"] as? String {
+                    completion(.success(Coordinates(latitude: latitude, longitude: longitude, title: title, subtitle: subtitle)))
+                }
+            } else {
+                print("Document does not exist")
+                if let error = error {
+                    completion(.failure(error))
+                }
             }
         }
     }

@@ -12,6 +12,8 @@
 		5E0AB05D2548277800529780 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AB05C2548277800529780 /* Defaults.swift */; };
 		5E0AB0612548279400529780 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AB0602548279400529780 /* Networking.swift */; };
 		5E0AB065254827BF00529780 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AB064254827BF00529780 /* Symbols.swift */; };
+		5E200A3725A24FB400C2C71B /* CoordinatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */; };
+		5E200A9C25A3566C00C2C71B /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */; };
 		5E2F5D57256BDD93007603D3 /* OfflineSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F5D56256BDD93007603D3 /* OfflineSupport.swift */; };
 		5E343CE325543D1D0031CD52 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CE225543D1D0031CD52 /* CoreDataManager.swift */; };
 		5E343CE6255440670031CD52 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E343CE5255440670031CD52 /* LoginViewController.swift */; };
@@ -30,6 +32,8 @@
 		5E71615E2534AF1F00A447DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E71615C2534AF1F00A447DE /* LaunchScreen.storyboard */; };
 		5EA8897D257E4D670046ED8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EA8897C257E4D670046ED8D /* GoogleService-Info.plist */; };
 		5EA88995257E7C300046ED8D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA88994257E7C300046ED8D /* MapViewController.swift */; };
+		5EACDE5B2580E90C005AFA93 /* PaginationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EACDE5A2580E90C005AFA93 /* PaginationViewController.swift */; };
+		5EACDE5E2580ED74005AFA93 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EACDE5D2580ED74005AFA93 /* TabBarController.swift */; };
 		5ED6E1A62548A7E10083B5AD /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1A52548A7E10083B5AD /* SocketService.swift */; };
 		5ED6E1AF2548F8870083B5AD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1AE2548F8870083B5AD /* Constants.swift */; };
 		5ED6E1B32548FAF30083B5AD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6E1B22548FAF30083B5AD /* AlertManager.swift */; };
@@ -44,6 +48,8 @@
 		5E0AB05C2548277800529780 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		5E0AB0602548279400529780 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		5E0AB064254827BF00529780 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
+		5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesViewController.swift; sourceTree = "<group>"; };
+		5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		5E2F5D56256BDD93007603D3 /* OfflineSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSupport.swift; sourceTree = "<group>"; };
 		5E343CE225543D1D0031CD52 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		5E343CE5255440670031CD52 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +70,8 @@
 		5E71615F2534AF1F00A447DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EA8897C257E4D670046ED8D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5EA88994257E7C300046ED8D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		5EACDE5A2580E90C005AFA93 /* PaginationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationViewController.swift; sourceTree = "<group>"; };
+		5EACDE5D2580ED74005AFA93 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		5ED6E1A52548A7E10083B5AD /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		5ED6E1AE2548F8870083B5AD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5ED6E1B22548FAF30083B5AD /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
@@ -92,6 +100,10 @@
 				5E0AB0582548272D00529780 /* SpinnerViewController.swift */,
 				5E343CE5255440670031CD52 /* LoginViewController.swift */,
 				5EA88994257E7C300046ED8D /* MapViewController.swift */,
+				5EACDE5A2580E90C005AFA93 /* PaginationViewController.swift */,
+				5EACDE5D2580ED74005AFA93 /* TabBarController.swift */,
+				5E200A3625A24FB400C2C71B /* CoordinatesViewController.swift */,
+				5E200A9B25A3566C00C2C71B /* AnimationsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -214,6 +226,7 @@
 				5E7161482534AF1F00A447DE /* Frameworks */,
 				5E7161492534AF1F00A447DE /* Resources */,
 				EA01DEFE74774048EDA9A7B3 /* [CP] Embed Pods Frameworks */,
+				EDCFEF9A3A602330FFD6955D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -311,6 +324,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileiOS/Pods-MobileiOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		EDCFEF9A3A602330FFD6955D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MobileiOS/Pods-MobileiOS-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MobileiOS/Pods-MobileiOS-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileiOS/Pods-MobileiOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -327,9 +357,13 @@
 				5E2F5D57256BDD93007603D3 /* OfflineSupport.swift in Sources */,
 				5E7161532534AF1F00A447DE /* ViewController.swift in Sources */,
 				5E0AB05D2548277800529780 /* Defaults.swift in Sources */,
+				5EACDE5E2580ED74005AFA93 /* TabBarController.swift in Sources */,
 				5E7161592534AF1F00A447DE /* MobileiOS.xcdatamodeld in Sources */,
+				5E200A3725A24FB400C2C71B /* CoordinatesViewController.swift in Sources */,
+				5EACDE5B2580E90C005AFA93 /* PaginationViewController.swift in Sources */,
 				5E343CED255443100031CD52 /* User.swift in Sources */,
 				5EA88995257E7C300046ED8D /* MapViewController.swift in Sources */,
+				5E200A9C25A3566C00C2C71B /* AnimationsViewController.swift in Sources */,
 				5E0AB0612548279400529780 /* Networking.swift in Sources */,
 				5E71614F2534AF1F00A447DE /* AppDelegate.swift in Sources */,
 				5ED6E1B32548FAF30083B5AD /* AlertManager.swift in Sources */,

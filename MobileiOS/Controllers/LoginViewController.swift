@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
         if Defaults.manager.getCurrentToken() != "" {
 //            NavigationManager.manager.navigateToNavigationController(currentViewController: self)
             DispatchQueue.main.async {
-                NavigationManager.manager.navigateToNavigationController(currentViewController: self)
+                NavigationManager.manager.navigateToTabBarController(currentViewController: self)
             }
             
         }
@@ -65,7 +65,7 @@ class LoginViewController: UIViewController {
                     print(Defaults.manager.getCurrentToken())
                     print("************************************************")
 
-                    NavigationManager.manager.navigateToNavigationController(currentViewController: self)
+                    NavigationManager.manager.navigateToTabBarController(currentViewController: self)
                 case .failure(_):
                     IHProgressHUD.dismiss()
                     AlertManager.manager.showAlert(currentViewController: self, message: "Network error")

@@ -42,7 +42,9 @@ class ViewController: UIViewController {
         getUIReady()
         fetchData()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
         checkConnection()
     }
     
@@ -101,7 +103,7 @@ extension ViewController{
             
             // reset defaults before downloading
             Defaults.manager.resetDefaults()
-            Defaults.store(downloadedItems)
+            Defaults.store(downloadedItemsSorted)
             strongSelf.listenToWebSocket()
             DispatchQueue.main.async {
                 strongSelf.tableView.reloadData()

@@ -32,4 +32,22 @@ class NavigationManager{
         currentViewController.view.window?.makeKeyAndVisible()
         
     }
+    
+    func navigateToTabBarController(currentViewController: UIViewController) {
+        let homeViewController = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.tabbarController) as? UITabBarController
+        currentViewController.view.window?.rootViewController = homeViewController
+        currentViewController.view.window?.makeKeyAndVisible()
+    }
+    
+    func navigateToCoordinatesViewController(currentViewController: UIViewController, itemId: String) {
+        guard let coordinatesViewController = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.coordinatesViewController) as? CoordinatesViewController else { return }
+        coordinatesViewController.itemId = itemId
+        currentViewController.navigationController?.pushViewController(coordinatesViewController, animated: true)
+    }
+    
+    func navigateToNavigationController2(currentViewController: UIViewController) {
+        let navigationController2 = currentViewController.storyboard?.instantiateViewController(withIdentifier: ViewControllerNames.navigationController2) as? UINavigationController
+        currentViewController.view.window?.rootViewController = navigationController2
+        currentViewController.view.window?.makeKeyAndVisible()
+    }
 }

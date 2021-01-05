@@ -32,6 +32,10 @@ class SecondViewController: UIViewController{
         downloadItemPicture()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     func downloadItemPicture() {
         IHProgressHUD.show()
         DatabaseManager.manager.getItemPicture(itemId: itemId, completion: { [weak self] result in
@@ -63,6 +67,10 @@ class SecondViewController: UIViewController{
         UIImageWriteToSavedPhotosAlbum(selectedImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
 
+    @IBAction func locationButtonPressed(_ sender: UIButton) {
+        NavigationManager.manager.navigateToCoordinatesViewController(currentViewController: self,itemId: itemId)
+    }
+    
     //MARK: - Add image to Library
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
